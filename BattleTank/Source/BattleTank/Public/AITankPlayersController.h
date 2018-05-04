@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "Tank.h"
 #include "GameFramework/Actor.h"
 #include "Engine/World.h"
 #include "AITankPlayersController.generated.h"
@@ -12,6 +11,7 @@
 /**
  * 
  */
+class ATank;
 UCLASS()
 class BATTLETANK_API AAITankPlayersController : public AAIController
 {
@@ -20,8 +20,13 @@ class BATTLETANK_API AAITankPlayersController : public AAIController
 	
 public:
 	void BeginPlay() override;
+	void Tick(float DeltaTime) override;
 	ATank* GetControlledTank() const;
 private:
 	ATank * GetPlayerTank() const;
+
+	void AimAtPlayerTank();
+
+	
 	
 };
