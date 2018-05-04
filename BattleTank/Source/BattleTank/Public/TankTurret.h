@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/StaticMeshComponent.h"
+#include "Engine/World.h"
 #include "TankTurret.generated.h"
 
 /**
@@ -16,5 +17,13 @@ class BATTLETANK_API UTankTurret : public UStaticMeshComponent
 public:
 	// -1 is max laft speed, and +1 is the max right speed
 	void Rotate(float);
+
+private:
+	UPROPERTY(EditAnywhere, Category = Setup)
+		float MaxDegreesPerSecond = 5.0;
+	UPROPERTY(EditAnywhere, Category = Setup)
+		float MaxRotationDegrees = 178.0;
+	UPROPERTY(EditAnywhere, Category = Setup)
+		float MinRotationDegrees = -178.0;
 
 };
