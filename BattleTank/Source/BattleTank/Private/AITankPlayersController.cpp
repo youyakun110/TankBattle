@@ -3,48 +3,20 @@
 #include "AITankPlayersController.h"
 #include "Tank.h"
 
-
-
-ATank* AAITankPlayersController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
-}
-ATank* AAITankPlayersController::GetPlayerTank() const
-{
-	return Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
-}
-
-void AAITankPlayersController::AimAtPlayerTank()
-{
-	FVector PlayerTankLocation = GetPlayerTank()->GetActorLocation();
-	GetControlledTank()->AimAt(PlayerTankLocation);
-}
-
 void AAITankPlayersController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	auto AITank = GetControlledTank();
-	auto PlayerTank = GetPlayerTank();
-	if (AITank) {
-		UE_LOG(LogTemp, Warning, TEXT("AI %s is possessing the tank."), *AITank->GetName());
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AI Tank is not got."));
-	}
-	if (PlayerTank) {
-		UE_LOG(LogTemp, Warning, TEXT("Player Tank %s is found."), *PlayerTank->GetName());
-		
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Player Tank is not got."));
-	}
-
 }
 void AAITankPlayersController::Tick(float DeltaTime)
 {
-	AimAtPlayerTank();
-}
+	Super::Tick(DeltaTime);
 
+	auto PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	auto ControlledTank = Cast<ATank>(GetPawn());
+
+	if (ControlledTank && PlayerTank) {
+		MoveToActor(PlayerTank, AcceptanceRadius); //TODO Check radius is in cm
+		ControlledTank->AimAt(PlayerTank->GetActorLocation());
+		ControlledTank->Fire(); //TODO Limiting the fire rate.
+	}
+}

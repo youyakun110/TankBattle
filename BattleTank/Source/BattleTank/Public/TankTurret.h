@@ -8,7 +8,7 @@
 #include "TankTurret.generated.h"
 
 /**
- * 
+ * Tank track is used to set the driving force and apply the forces to the tank
  */
 UCLASS(meta = (BlueprintSpawnableComponent))
 class BATTLETANK_API UTankTurret : public UStaticMeshComponent
@@ -19,11 +19,11 @@ public:
 	void Rotate(float);
 
 private:
-	UPROPERTY(EditAnywhere, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		float MaxDegreesPerSecond = 5.0;
-	UPROPERTY(EditAnywhere, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		float MaxRotationDegrees = 178.0;
-	UPROPERTY(EditAnywhere, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		float MinRotationDegrees = -178.0;
 
 };

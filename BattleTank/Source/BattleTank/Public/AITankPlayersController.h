@@ -16,17 +16,8 @@ UCLASS()
 class BATTLETANK_API AAITankPlayersController : public AAIController
 {
 	GENERATED_BODY()
-	
-	
 public:
 	void BeginPlay() override;
 	void Tick(float DeltaTime) override;
-	ATank* GetControlledTank() const;
-private:
-	ATank * GetPlayerTank() const;
-
-	void AimAtPlayerTank();
-
-	
-	
+	float AcceptanceRadius = 100.0;
 };
