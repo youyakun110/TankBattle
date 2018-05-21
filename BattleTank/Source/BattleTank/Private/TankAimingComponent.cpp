@@ -11,19 +11,14 @@ UTankAimingComponent::UTankAimingComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
-
 	// ...
 }
 
-void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
+void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet)
 {
-	if (!BarrelToSet) { return; }
-	this->Barrel = BarrelToSet;
-}
-void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)
-{
-	if (!TurretToSet) { return; }
-	this->Turret = TurretToSet;
+	if (!ensure(BarrelToSet && TurretToSet)) { return; }
+	Barrel = BarrelToSet;
+	Turret = TurretToSet;
 }
 
 
@@ -31,11 +26,8 @@ void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)
 void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
 	// ...
-	
 }
-
 
 // Called every frame
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -45,10 +37,10 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	// ...
 }
 
-void UTankAimingComponent::AimAt(FVector SpaceLocation, float LaunchSpeed)
+void UTankAimingComponent::AimAt(FVector SpaceLocation)
 {
 	auto TankName = GetOwner()->GetName();
-	if (!Barrel) { return; }
+	if (!ensure(Barrel)) { return; }
 	FVector OutLaunchVelocity;
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 
@@ -61,7 +53,7 @@ void UTankAimingComponent::AimAt(FVector SpaceLocation, float LaunchSpeed)
 		OutLaunchVelocity,
 		StartLocation,
 		SpaceLocation,
-		LaunchSpeed,
+		AimLaunchSpeed,
 		false,
 		0,
 		0
@@ -92,11 +84,11 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 }
 
 void UTankAimingComponent::MoveTurretTowards(FVector AimDirection) {
+	if (!ensure(Turret)) { return; }
 	auto TurretRotator = Turret->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - TurretRotator;
 	//UE_LOG(LogTemp, Warning, TEXT("TurretRotator: %s"), *TurretRotator.ToString());
-
 	Turret->Rotate(DeltaRotator.Yaw);
 }
 

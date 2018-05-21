@@ -7,10 +7,9 @@
 #include "Engine/World.h"
 #include "TankPlayerController.generated.h"
 
-class ATank;
-
+class UTankAimingComponent;
 /**
- * 
+ * Responsible for helping the player to aim.
  */
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
@@ -21,8 +20,10 @@ public:
 	void BeginPlay() override;
 	void Tick(float DeltaTime) override;
 protected:
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-	ATank* GetControlledTank() const;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+	void FoundAimingComponent(UTankAimingComponent* AimCompRef);
+
 private:
 	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
 	UPROPERTY(EditAnywhere)
@@ -36,6 +37,8 @@ private:
 
 	bool GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const;
 	bool GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation) const;
+
+	UTankAimingComponent* AimingComp = nullptr;
 };
 
 

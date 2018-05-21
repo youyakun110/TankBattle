@@ -8,10 +8,10 @@
 #include "Engine/World.h"
 #include "AITankPlayersController.generated.h"
 
+class UTankAimingComponent;
 /**
  * 
  */
-class ATank;
 UCLASS()
 class BATTLETANK_API AAITankPlayersController : public AAIController
 {

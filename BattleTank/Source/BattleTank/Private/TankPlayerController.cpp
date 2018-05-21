@@ -1,23 +1,19 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankPlayerController.h"
-#include "Tank.h"
+#include "TankAimingComponent.h"
 
 #define OUT
-ATank* ATankPlayerController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
-}
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!GetControlledTank()) { return; }
+	if (!ensure(AimingComp)) { return; }
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation))
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("HitLocation : %s"), *HitLocation.ToString())
 
-		GetControlledTank()->AimAt(HitLocation);
+		AimingComp->AimAt(HitLocation);
 	}
 	else {
 		auto time = GetWorld()->GetTimeSeconds();
@@ -57,14 +53,10 @@ void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	auto PlayerTank = GetControlledTank();
-	if (PlayerTank) {
-		UE_LOG(LogTemp, Warning, TEXT("Player Controller %s is possessing the tank"), *PlayerTank->GetName());
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Tank is not got."));
-	}
+	AimingComp = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComp)) { return; }
+	FoundAimingComponent(AimingComp);
+
 }
 void ATankPlayerController::Tick(float DeltaTime)
 {
@@ -72,13 +64,11 @@ void ATankPlayerController::Tick(float DeltaTime)
 	AimTowardsCrosshair();
 }
 
-
 bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const
 {
 	FVector CameraWorldLocation;
 	return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CameraWorldLocation, LookDirection);
 }
-
 
 bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation) const 
 {

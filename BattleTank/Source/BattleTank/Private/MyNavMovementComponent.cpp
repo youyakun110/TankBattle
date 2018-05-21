@@ -7,21 +7,21 @@
 
 void UMyNavMovementComponent::Initialise(UTankTrack* LeftTrack, UTankTrack* RightTrack)
 {
-	if (!LeftTrack && !RightTrack) { return; }
+	if (!ensure(LeftTrack && RightTrack)) { return; }
 	LeftTrackToSet = LeftTrack;
 	RightTrackToSet = RightTrack;
 }
 
 void UMyNavMovementComponent::IntendMoveForward(float Throw)
 {
-	if (!LeftTrackToSet && !RightTrackToSet) { return; }
+	if (!ensure(LeftTrackToSet && RightTrackToSet)) { return; }
 	LeftTrackToSet->SetThrottle(Throw);
 	RightTrackToSet->SetThrottle(Throw);
 }
 
 void UMyNavMovementComponent::IntendMoveClockwise(float Throw)
 {
-	if (!LeftTrackToSet && !RightTrackToSet) { return; }
+	if (!ensure(LeftTrackToSet && RightTrackToSet)) { return; }
 	LeftTrackToSet->SetThrottle(Throw);
 	RightTrackToSet->SetThrottle(-Throw);
 }
