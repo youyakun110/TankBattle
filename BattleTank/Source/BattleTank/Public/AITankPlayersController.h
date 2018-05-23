@@ -16,8 +16,12 @@ UCLASS()
 class BATTLETANK_API AAITankPlayersController : public AAIController
 {
 	GENERATED_BODY()
+protected:
+	UPROPERTY(EditAnywhere, Category = "Setup")
+	float AcceptanceRadius = 7000.0;
 public:
 	void BeginPlay() override;
+
 	void Tick(float DeltaTime) override;
-	float AcceptanceRadius = 100.0;
+
 };

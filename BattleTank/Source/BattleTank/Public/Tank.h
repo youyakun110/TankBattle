@@ -26,8 +26,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetTurretReference(UTankTurret* TurretToSet);
 	*/
-	UFUNCTION(BlueprintCallable, Category = "Firing")
-	void Fire();
 
 	//Get the tank aim at a location
 	//void AimAt(FVector location);
@@ -37,22 +35,4 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Input")
 	UMyNavMovementComponent* MovementComponent = nullptr;
-
-
-private:	
-
-	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-	TSubclassOf<AProjectile> Projectile_BP; 
-
-	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	float LaunchSpeed = 4000.0; //default starting value of 40m/s
-
-	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	float ReloadTimeInSeconds = 3;
-
-
-	UTankBarrel* Barrel = nullptr;
-
-	//Firing rate
-	double LastFireTime = 0;
 };

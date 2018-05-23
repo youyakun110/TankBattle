@@ -17,8 +17,11 @@ void AAITankPlayersController::Tick(float DeltaTime)
 	if (!ensure(ControlledTank && PlayerTank)) { return; }
 
 	MoveToActor(PlayerTank, AcceptanceRadius); //TODO Check radius is in cm
-	ControlledTank->FindComponentByClass<UTankAimingComponent>()->AimAt(PlayerTank->GetActorLocation());
-	//ControlledTank->Fire(); 
-	//TODO Fix firing.
+	UTankAimingComponent* TankAimingComp = ControlledTank->FindComponentByClass<UTankAimingComponent>();
+	TankAimingComp->AimAt(PlayerTank->GetActorLocation());
 
+	if (TankAimingComp->GetFireState() == EFiringState::Locked)
+	{
+		TankAimingComp->Fire();
+	}
 }
