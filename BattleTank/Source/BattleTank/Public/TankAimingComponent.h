@@ -74,7 +74,7 @@ private:
 	TSubclassOf<AProjectile> Projectile_BP;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	float InitAmmo = 5;
+	int32 InitAmmo = 5;
 
 
 	//Firing rate

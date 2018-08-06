@@ -19,6 +19,8 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 public:
 	void BeginPlay() override;
 	void Tick(float DeltaTime) override;
+
+	virtual void SetPawn(APawn* Inpawn) override;
 protected:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
@@ -39,6 +41,9 @@ private:
 	bool GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation) const;
 
 	UTankAimingComponent* AimingComp = nullptr;
+
+	UFUNCTION()
+	void OnpossedTankDeath();
 };
 
 

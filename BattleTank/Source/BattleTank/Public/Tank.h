@@ -11,6 +11,8 @@ class UTankTurret;
 class AProjectile;
 class UMyNavMovementComponent;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTankDelegate);
+
 UCLASS()
 class BATTLETANK_API ATank : public APawn
 {
@@ -19,20 +21,26 @@ class BATTLETANK_API ATank : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ATank();
+	//called by the engine the actor demage is dealt
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 
-	/*
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetBarrelReference(UTankBarrel* BarrelToSet);
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetTurretReference(UTankTurret* TurretToSet);
-	*/
+	//Return current health as a percentage of starting health, between 0 and 1
+	UFUNCTION(BlueprintPure, category = "Health")
+	float GetHealthPercent() const;
 
-	//Get the tank aim at a location
-	//void AimAt(FVector location);
+	FTankDelegate OnDeath;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Input")
 	UMyNavMovementComponent* MovementComponent = nullptr;
+
+	
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	int32 StartingHealth = 100;
+
+	int32 CurrentHealth;
 };

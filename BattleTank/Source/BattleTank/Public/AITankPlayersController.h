@@ -24,4 +24,8 @@ public:
 
 	void Tick(float DeltaTime) override;
 
+	virtual void SetPawn(APawn* Inpawn) override;
+private:
+	UFUNCTION()
+	void OnpossedTankDeath();
 };

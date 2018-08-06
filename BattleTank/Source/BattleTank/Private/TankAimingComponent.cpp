@@ -21,7 +21,6 @@ void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret* Tur
 	Turret = TurretToSet;
 }
 
-
 // Called when the game starts
 void UTankAimingComponent::BeginPlay()
 {
@@ -84,7 +83,6 @@ void UTankAimingComponent::AimAt(FVector SpaceLocation)
 		0
 		,ESuggestProjVelocityTraceOption::DoNotTrace
 	);
-	
 	
 	if (ProjectileVelocity)
 	{

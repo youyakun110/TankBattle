@@ -23,20 +23,29 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
+	CurrentHealth = StartingHealth;
 }
 
-// Called to bind functionality to input
+float ATank::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
+{
+	int32 DamagePoints = FPlatformMath::RoundToInt(DamageAmount);
+	int32 DamageToApply = FMath::Clamp(DamagePoints, 0, CurrentHealth);
 
-/*
-void ATank::SetBarrelReference(UTankBarrel* BarrelToSet)
-{
-	TankAimingComponent->SetBarrelReference(BarrelToSet);
-	Barrel = BarrelToSet;
+	CurrentHealth -= DamageToApply;
+
+	if (CurrentHealth <= 0)
+	{
+		OnDeath.Broadcast();
+	}
+
+	
+	return DamageToApply;
 }
-void ATank::SetTurretReference(UTankTurret* TurretToSet)
+
+float ATank::GetHealthPercent() const
 {
-	TankAimingComponent->SetTurretReference(TurretToSet);
+	return (float)CurrentHealth / (float)StartingHealth;
+	UE_LOG(LogTemp, Warning, TEXT("Percentage: %f"), (float)CurrentHealth / (float)StartingHealth);
 }
-*/
 
 

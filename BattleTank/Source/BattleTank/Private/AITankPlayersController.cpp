@@ -2,6 +2,8 @@
 
 #include "AITankPlayersController.h"
 #include "TankAimingComponent.h"
+#include "Classes/GameFramework/Pawn.h"
+#include "Tank.h"
 
 void AAITankPlayersController::BeginPlay()
 {
@@ -14,7 +16,7 @@ void AAITankPlayersController::Tick(float DeltaTime)
 	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
 	auto ControlledTank = GetPawn();
 
-	if (!ensure(ControlledTank && PlayerTank)) { return; }
+	if (!ControlledTank || !PlayerTank) { return; }
 
 	MoveToActor(PlayerTank, AcceptanceRadius); //TODO Check radius is in cm
 	UTankAimingComponent* TankAimingComp = ControlledTank->FindComponentByClass<UTankAimingComponent>();
@@ -24,4 +26,21 @@ void AAITankPlayersController::Tick(float DeltaTime)
 	{
 		TankAimingComp->Fire();
 	}
+}
+
+void AAITankPlayersController::SetPawn(APawn * InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (InPawn)
+	{
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) { return; }
+
+		PossessedTank->OnDeath.AddUniqueDynamic(this, &AAITankPlayersController::OnpossedTankDeath);
+	}
+}
+void AAITankPlayersController::OnpossedTankDeath()
+{
+	if (!ensure(GetPawn())) { return; }
+	GetPawn()->DetachFromControllerPendingDestroy();
 }
